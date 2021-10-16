@@ -1,4 +1,4 @@
-package org.jharkendar.data;
+package org.jharkendar.data.topic;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -1,13 +1,9 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.topic;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import javax.ws.rs.core.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -17,7 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.jharkendar.util.JsonMapper.toJson;
 
 @QuarkusTest
-class TopicResourcePostTest extends BaseTest {
+class TopicResourcePostTest extends TopicBaseTest {
 
     @Test
     void create_topic() {
@@ -28,7 +24,7 @@ class TopicResourcePostTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(createTopicDto)
                         .when()
-                        .post("/topic")
+                        .post(topicUrl)
                         .then();
 
         response.statusCode(201);
@@ -36,7 +32,7 @@ class TopicResourcePostTest extends BaseTest {
 
         String uuid = extractUuid(response);
 
-        assertThat(response.extract().header("location")).startsWith("http://localhost:8081/topic/");
+        assertThat(response.extract().header("location")).startsWith(topicUrl.toString());
         assertThat(isUuid(uuid)).isTrue();
     }
 
@@ -46,7 +42,7 @@ class TopicResourcePostTest extends BaseTest {
         ValidatableResponse response = given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .when()
-                .post("/topic")
+                .post(topicUrl)
                 .then();
 
         response.statusCode(400);
@@ -60,13 +56,12 @@ class TopicResourcePostTest extends BaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(createTopicDto)
                 .when()
-                .post("/topic")
+                .post(topicUrl)
                 .then();
 
         response.statusCode(400);
         response.body(containsString("name cannot be empty"));
     }
-
 
 
 }

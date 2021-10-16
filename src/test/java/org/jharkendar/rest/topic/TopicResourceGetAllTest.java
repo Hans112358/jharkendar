@@ -1,4 +1,4 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.topic;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
@@ -7,57 +7,52 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.MediaType;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.jharkendar.util.JsonMapper.toJson;
 
 @QuarkusTest
-class TopicResourceGetTest extends BaseTest {
+class TopicResourceGetAllTest extends TopicBaseTest {
 
     @Test
-    void get_by_name() {
+    void get_two_items() {
         String createTopicDto1 = toJson(new CreateTopicDto("Important stuff"));
         String createTopicDto2 = toJson(new CreateTopicDto("Other stuff"));
 
-        ValidatableResponse response = given()
+        ValidatableResponse response1 = given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(createTopicDto1)
                 .when()
-                .post("/topic")
+                .post(topicUrl)
                 .then();
 
-        given()
+        ValidatableResponse response2 = given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(createTopicDto2)
                 .when()
-                .post("/topic")
+                .post(topicUrl)
                 .then();
 
-        String id = extractUuid(response);
+        String id1 = extractUuid(response1);
+        String id2 = extractUuid(response2);
 
         given()
                 .when()
-                .get("/topic/" + id)
+                .get(topicUrl)
                 .then()
                 .statusCode(200)
-                .body(is("{\"id\":\"" + id + "\",\"name\":\"Important stuff\"}"));
+                .body(containsString("{\"id\":\"" + id1 + "\",\"name\":\"Important stuff\"}"))
+                .body(containsString("{\"id\":\"" + id2 + "\",\"name\":\"Other stuff\"}"));
     }
 
     @Test
-    void handle_not_existing_topic_name() {
-        String createTopicDto = toJson(new CreateTopicDto("Important stuff"));
-
-        given()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(createTopicDto)
-                .when()
-                .post("/topic")
-                .then();
-
+    void get_empty_list() {
         given()
                 .when()
-                .get("/topic/123")
+                .get(topicUrl)
                 .then()
-                .statusCode(404)
-                .body(is("No entity found for id 123"));
+                .statusCode(200)
+                .body(is("[]"));
     }
+
 }

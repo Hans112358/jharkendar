@@ -1,4 +1,4 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.topic;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.jharkendar.util.JsonMapper.toJson;
 
 @QuarkusTest
-class TopicResourcePutTest extends BaseTest {
+class TopicResourcePutTest extends TopicBaseTest {
 
     @Test
     void update_name() {
@@ -22,7 +22,7 @@ class TopicResourcePutTest extends BaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(createTopicDto)
                 .when()
-                .post("/topic")
+                .post(topicUrl)
                 .then();
 
         String id = extractUuid(responsePost);
@@ -33,16 +33,16 @@ class TopicResourcePutTest extends BaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updateTopicDto)
                 .when()
-                .put("/topic/" + id)
+                .put(topicUrl + "/" + id)
                 .then()
                 .statusCode(200);
 
         given()
                 .when()
-                .get("/topic?name=Other%20stuff")
+                .get(topicUrl + "/" + id)
                 .then()
                 .statusCode(200)
-                .body(is("[{\"id\":\"" + id + "\",\"name\":\"Other stuff\"}]"));
+                .body(is("{\"id\":\"" + id + "\",\"name\":\"Other stuff\"}"));
     }
 
     @Test
@@ -54,7 +54,7 @@ class TopicResourcePutTest extends BaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updateTopicDto)
                 .when()
-                .put("/topic/123")
+                .put(topicUrl + "/123")
                 .then()
                 .statusCode(404)
                 .body(is("No entity found for id 123"));
@@ -70,7 +70,7 @@ class TopicResourcePutTest extends BaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updateTopicDto)
                 .when()
-                .put("/topic/123")
+                .put(topicUrl + "/123")
                 .then()
                 .statusCode(400)
                 .body(containsString("name cannot be empty"));

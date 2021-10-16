@@ -37,6 +37,6 @@ docker-compose up
 ```aidl
 curl --header "Content-Type: application/json" \
                             --request GET \
-                            localhost:8081/topic/get
+                            localhost:8080/topic/get
 
 ```

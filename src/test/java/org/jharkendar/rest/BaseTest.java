@@ -7,10 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.net.URL;
 import java.util.UUID;
 
 @QuarkusTest
-class BaseTest {
+public abstract class BaseTest {
 
     @Inject
     EntityManager entityManager;
@@ -21,14 +22,20 @@ class BaseTest {
         entityManager
                 .createQuery("delete from JpaTopic ")
                 .executeUpdate();
+
+        entityManager
+                .createQuery("delete from JpaTag ")
+                .executeUpdate();
     }
 
-    String extractUuid(ValidatableResponse response) {
+    public String extractUuid(ValidatableResponse response) {
         String location = response.extract().header("location");
-        return location.replace("http://localhost:8081/topic/", "");
+        return location.replace(getUrl().toString() + "/", "");
     }
 
-    boolean isUuid(String id) {
+    public abstract URL getUrl();
+
+    public boolean isUuid(String id) {
         try {
             UUID uuid = UUID.fromString(id);
             return true;
@@ -36,4 +43,6 @@ class BaseTest {
             return false;
         }
     }
+
+
 }

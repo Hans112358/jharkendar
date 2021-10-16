@@ -1,4 +1,4 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.tag;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
@@ -12,25 +12,25 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.jharkendar.util.JsonMapper.toJson;
 
 @QuarkusTest
-class TopicResourceGetAllTest extends BaseTest{
+class TagResourceGetAllTest extends TagBaseTest {
 
     @Test
     void get_two_items() {
-        String createTopicDto1 = toJson(new CreateTopicDto("Important stuff"));
-        String createTopicDto2 = toJson(new CreateTopicDto("Other stuff"));
+        String createTagDto1 = toJson(new CreateTagDto("Important stuff"));
+        String createTagDto2 = toJson(new CreateTagDto("Other stuff"));
 
         ValidatableResponse response1 = given()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(createTopicDto1)
+                .body(createTagDto1)
                 .when()
-                .post("/topic")
+                .post(tagUrl)
                 .then();
 
         ValidatableResponse response2 = given()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(createTopicDto2)
+                .body(createTagDto2)
                 .when()
-                .post("/topic")
+                .post(tagUrl)
                 .then();
 
         String id1 = extractUuid(response1);
@@ -38,7 +38,7 @@ class TopicResourceGetAllTest extends BaseTest{
 
         given()
                 .when()
-                .get("/topic")
+                .get(tagUrl)
                 .then()
                 .statusCode(200)
                 .body(containsString("{\"id\":\"" + id1 + "\",\"name\":\"Important stuff\"}"))
@@ -49,7 +49,7 @@ class TopicResourceGetAllTest extends BaseTest{
     void get_empty_list() {
         given()
                 .when()
-                .get("/topic")
+                .get(tagUrl)
                 .then()
                 .statusCode(200)
                 .body(is("[]"));

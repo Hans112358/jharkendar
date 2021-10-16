@@ -1,4 +1,4 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.tag;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @RegisterForReflection
-public class CreateTopicDto {
+public class CreateTagDto {
     @NotBlank(message = "name cannot be empty")
     String name;
 }

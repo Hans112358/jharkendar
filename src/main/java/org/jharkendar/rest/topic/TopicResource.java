@@ -1,5 +1,6 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.topic;
 
+import org.jharkendar.rest.NotFoundResponse;
 import org.jharkendar.service.TopicService;
 
 import javax.inject.Inject;

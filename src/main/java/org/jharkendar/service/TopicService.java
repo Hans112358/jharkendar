@@ -1,8 +1,9 @@
 package org.jharkendar.service;
 
 
-import org.jharkendar.data.JpaTopic;
-import org.jharkendar.data.TopicRepository;
+import org.jharkendar.data.topic.JpaTopic;
+import org.jharkendar.data.topic.TopicRepository;
+import org.jharkendar.rest.topic.PublicTopicDto;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

@@ -1,40 +1,44 @@
-package org.jharkendar.rest;
+package org.jharkendar.rest.tag;
 
+import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
+import org.jharkendar.rest.tag.CreateTagDto;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
+
+import java.net.URL;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.jharkendar.util.JsonMapper.toJson;
 
 @QuarkusTest
-class TopicDeleteTest extends BaseTest {
+class TagDeleteTest extends TagBaseTest {
 
     @Test
-    void delete_topic() {
-        String createTopicDto = toJson(new CreateTopicDto("Important stuff"));
+    void delete_tag() {
+        String createTagDto = toJson(new CreateTagDto("Important stuff"));
 
         ValidatableResponse response = given()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(createTopicDto)
+                .body(createTagDto)
                 .when()
-                .post("/topic")
+                .post(tagUrl)
                 .then();
 
         String id = extractUuid(response);
 
         given()
                 .when()
-                .delete("/topic/" + id)
+                .delete(tagUrl + "/" + id)
                 .then()
                 .statusCode(200);
 
         given()
                 .when()
-                .get("/topic")
+                .get(tagUrl)
                 .then()
                 .statusCode(200)
                 .body(is("[]"));
@@ -44,7 +48,7 @@ class TopicDeleteTest extends BaseTest {
     void handle_id_not_found() {
         given()
                 .when()
-                .delete("/topic/123")
+                .delete(tagUrl + "/123")
                 .then()
                 .statusCode(404)
                 .body(is("No entity found for id 123"));
