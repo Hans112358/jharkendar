@@ -30,6 +30,17 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.21.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-orm</artifactId>
     </dependency>
@@ -39,11 +50,11 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-elytron-security-properties-file</artifactId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-h2</artifactId>
+      <artifactId>quarkus-elytron-security-properties-file</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -51,7 +62,7 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-reactive</artifactId>
+      <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

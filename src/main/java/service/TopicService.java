@@ -18,12 +18,12 @@ public class TopicService {
     EntityManager entityManager;
 
     @Transactional
-    public JpaTopic create(String name) {
+    public String create(String name) {
         JpaTopic jpaTopic = new JpaTopic();
         jpaTopic.setId(UUID.randomUUID().toString());
         jpaTopic.setName(name);
         entityManager.persist(jpaTopic);
-        return jpaTopic;
+        return jpaTopic.getId();
     }
 
     @Transactional
