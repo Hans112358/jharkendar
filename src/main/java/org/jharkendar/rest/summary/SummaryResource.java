@@ -1,8 +1,9 @@
-package org.jharkendar.rest.topic;
+package org.jharkendar.rest.summary;
 
 import org.jharkendar.rest.NotFoundResponse;
-import org.jharkendar.service.TopicService;
-import org.jharkendar.util.exception.TopicNotFoundException;
+import org.jharkendar.service.SummaryService;
+import org.jharkendar.util.exception.EntityNotFoundException;
+import org.jharkendar.util.exception.SummaryNotFoundException;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -12,19 +13,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
-@Path("/topic")
-public class TopicResource {
+@Path("/summary")
+public class SummaryResource {
 
     @Inject
-    TopicService topicService;
+    SummaryService summaryService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response get(@PathParam("id") String id) {
         try {
-            return Response.ok(topicService.getById(id)).build();
-        } catch (TopicNotFoundException e) {
+            return Response.ok(summaryService.getById(id)).build();
+        } catch (SummaryNotFoundException e) {
             return NotFoundResponse.get(e.getMessage());
         }
     }
@@ -33,18 +34,22 @@ public class TopicResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
         return Response
-                .ok(topicService.getAll())
+                .ok(summaryService.getAll())
                 .build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@Valid @NotNull CreateTopicDto dto) {
-        String id = topicService.create(dto.getName());
-        return Response
-                .created(URI.create("topic/" + id))
-                .build();
+    public Response create(@Valid @NotNull CreateSummaryDto dto) {
+        try {
+            String id = summaryService.create(dto);
+            return Response
+                    .created(URI.create("summary/" + id))
+                    .build();
+        } catch (EntityNotFoundException e) {
+            return NotFoundResponse.get(e.getMessage());
+        }
     }
 
     @DELETE
@@ -52,8 +57,8 @@ public class TopicResource {
     @Path("/{id}")
     public Response delete(@PathParam("id") String id) {
         try {
-            topicService.delete(id);
-        } catch (TopicNotFoundException e) {
+            summaryService.delete(id);
+        } catch (NotFoundException e) {
             return NotFoundResponse.get(e.getMessage());
         }
         return Response.ok().build();
@@ -63,11 +68,11 @@ public class TopicResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response update(@PathParam("id") String id, @Valid @NotNull UpdateTopicDto dto) {
+    public Response update(@PathParam("id") String id, @Valid @NotNull UpdateSummaryDto dto) {
         try {
-            topicService.update(id, dto.name);
+            summaryService.update(id, dto);
             return Response.ok().build();
-        } catch (TopicNotFoundException e) {
+        } catch (NotFoundException e) {
             return NotFoundResponse.get(e.getMessage());
         }
     }

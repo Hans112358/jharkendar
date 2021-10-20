@@ -4,11 +4,11 @@ package org.jharkendar.service;
 import org.jharkendar.data.topic.JpaTopic;
 import org.jharkendar.data.topic.TopicRepository;
 import org.jharkendar.rest.topic.PublicTopicDto;
+import org.jharkendar.util.exception.TopicNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -48,7 +48,7 @@ public class TopicService {
     }
 
     private JpaTopic getByIdInternal(String id) {
-        return topicRepository.findById(id).orElseThrow(NotFoundException::new);
+        return topicRepository.findById(id).orElseThrow(() -> new TopicNotFoundException(id));
     }
 
     @Transactional

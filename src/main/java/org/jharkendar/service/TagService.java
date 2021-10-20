@@ -3,11 +3,11 @@ package org.jharkendar.service;
 import org.jharkendar.data.tag.JpaTag;
 import org.jharkendar.data.tag.TagRepository;
 import org.jharkendar.rest.tag.PublicTagDto;
+import org.jharkendar.util.exception.TagNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,7 +47,8 @@ public class TagService {
     }
 
     private JpaTag getByIdInternal(String id) {
-        return tagRepository.findById(id).orElseThrow(NotFoundException::new);
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new TagNotFoundException(id));
     }
 
     @Transactional

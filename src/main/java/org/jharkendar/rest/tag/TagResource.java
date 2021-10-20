@@ -1,9 +1,8 @@
 package org.jharkendar.rest.tag;
 
 import org.jharkendar.rest.NotFoundResponse;
-import org.jharkendar.rest.tag.CreateTagDto;
-import org.jharkendar.rest.tag.UpdateTagDto;
 import org.jharkendar.service.TagService;
+import org.jharkendar.util.exception.TagNotFoundException;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -25,8 +24,8 @@ public class TagResource {
     public Response get(@PathParam("id") String id) {
         try {
             return Response.ok(tagService.getById(id)).build();
-        } catch (NotFoundException e) {
-            return NotFoundResponse.get(id);
+        } catch (TagNotFoundException e) {
+            return NotFoundResponse.get(e.getMessage());
         }
     }
 
@@ -54,8 +53,8 @@ public class TagResource {
     public Response delete(@PathParam("id") String id) {
         try {
             tagService.delete(id);
-        } catch (NotFoundException e) {
-            return NotFoundResponse.get(id);
+        } catch (TagNotFoundException e) {
+            return NotFoundResponse.get(e.getMessage());
         }
         return Response.ok().build();
     }
@@ -68,8 +67,8 @@ public class TagResource {
         try {
             tagService.update(id, dto.name);
             return Response.ok().build();
-        } catch (NotFoundException e) {
-            return NotFoundResponse.get(id);
+        } catch (TagNotFoundException e) {
+            return NotFoundResponse.get(e.getMessage());
         }
     }
 

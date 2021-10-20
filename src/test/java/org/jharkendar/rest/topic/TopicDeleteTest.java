@@ -2,7 +2,6 @@ package org.jharkendar.rest.topic;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
-import org.jharkendar.rest.topic.CreateTopicDto;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -48,7 +47,7 @@ class TopicDeleteTest extends TopicBaseTest {
                 .delete(topicUrl + "/123")
                 .then()
                 .statusCode(404)
-                .body(is("No entity found for id 123"));
+                .body(is("No Topic found for id 123"));
     }
 
 }

@@ -65,6 +65,12 @@
       <artifactId>quarkus-jdbc-mysql</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>2.23.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>

@@ -1,14 +1,10 @@
 package org.jharkendar.rest.tag;
 
-import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
-import org.jharkendar.rest.tag.CreateTagDto;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
-
-import java.net.URL;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -51,7 +47,7 @@ class TagDeleteTest extends TagBaseTest {
                 .delete(tagUrl + "/123")
                 .then()
                 .statusCode(404)
-                .body(is("No entity found for id 123"));
+                .body(is("No Tag found for id 123"));
     }
 
 }

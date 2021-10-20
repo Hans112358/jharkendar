@@ -2,8 +2,6 @@ package org.jharkendar.rest.tag;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
-import org.jharkendar.rest.tag.CreateTagDto;
-import org.jharkendar.rest.tag.UpdateTagDto;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -59,7 +57,7 @@ class TagResourcePutTest extends TagBaseTest {
                 .put(tagUrl + "/123")
                 .then()
                 .statusCode(404)
-                .body(is("No entity found for id 123"));
+                .body(is("No Tag found for id 123"));
 
     }
 
