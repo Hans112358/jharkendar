@@ -1,5 +1,6 @@
 package org.jharkendar.rest.topic;
 
+import org.jharkendar.rest.MethodNotAllowedResponse;
 import org.jharkendar.rest.NotFoundResponse;
 import org.jharkendar.service.TopicService;
 import org.jharkendar.util.exception.TopicNotFoundException;
@@ -55,6 +56,8 @@ public class TopicResource {
             topicService.delete(id);
         } catch (TopicNotFoundException e) {
             return NotFoundResponse.get(e.getMessage());
+        } catch (IllegalStateException e) {
+            return MethodNotAllowedResponse.get(e.getMessage());
         }
         return Response.ok().build();
     }

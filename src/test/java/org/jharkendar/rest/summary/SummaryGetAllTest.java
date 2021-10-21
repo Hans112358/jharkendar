@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -41,16 +42,11 @@ class SummaryGetAllTest extends SummaryBaseTest {
                 .then();
 
         responseGet.statusCode(200);
-        List<PublicSummaryDto> publicSummaryDtos = ((List<PublicSummaryDto>) responseGet.extract().as(List.class));
-        assertThat(publicSummaryDtos).containsExactly(
-                new PublicSummaryDto(
-                        uuid,
-                        "title",
-                        null,
-                        topicId,
-                        new ArrayList<>()
-                )
-        );
+        LinkedHashMap<String, Object> publicSummaryDtos = (LinkedHashMap<String, Object>) responseGet.extract().as(List.class).get(0);
+        assertThat(publicSummaryDtos.get("id")).isEqualTo(uuid);
+        assertThat(publicSummaryDtos.get("tagIds")).isEqualTo(new ArrayList<>());
+        assertThat(publicSummaryDtos.get("title")).isEqualTo("title");
+        assertThat(publicSummaryDtos.get("topicId")).isEqualTo(topicId);
     }
 
 }
