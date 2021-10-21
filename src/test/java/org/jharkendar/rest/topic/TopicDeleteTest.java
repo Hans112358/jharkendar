@@ -1,13 +1,11 @@
 package org.jharkendar.rest.topic;
 
-import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ValidatableResponse;
 import org.jharkendar.rest.summary.CreateSummaryDto;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
-import java.net.URL;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -15,9 +13,6 @@ import static org.jharkendar.util.JsonMapper.toJson;
 
 @QuarkusTest
 class TopicDeleteTest extends TopicBaseTest {
-
-    @TestHTTPResource("/summary")
-    URL summaryUrl;
 
     @Test
     void delete_topic() {

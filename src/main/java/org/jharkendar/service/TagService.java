@@ -1,5 +1,9 @@
 package org.jharkendar.service;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.jharkendar.data.summary.JpaSummary;
+import org.jharkendar.data.summary.SummaryRepository;
 import org.jharkendar.data.tag.JpaTag;
 import org.jharkendar.data.tag.TagRepository;
 import org.jharkendar.rest.tag.PublicTagDto;
@@ -9,15 +13,21 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @ApplicationScoped
+@AllArgsConstructor
+@NoArgsConstructor
 public class TagService {
 
     @Inject
     TagRepository tagRepository;
+
+    @Inject
+    SummaryRepository summaryRepository;
 
     @Transactional
     public String create(String name) {
@@ -38,7 +48,17 @@ public class TagService {
     @Transactional
     public void delete(String id) {
         JpaTag jpaTag = getByIdInternal(id);
+
+        List<JpaSummary> jpaSummaries = summaryRepository.findByTagId(id);
+        jpaSummaries.forEach(s -> deleteTagFromSummary(s, jpaTag));
+
         tagRepository.delete(jpaTag);
+    }
+
+    private void deleteTagFromSummary(JpaSummary summary, JpaTag tag) {
+        Set<JpaTag> tags = summary.getTags();
+        tags.remove(tag);
+        summaryRepository.save(summary);
     }
 
     @Transactional

@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class SummaryServiceTest {
 
-    SummaryService summaryService;
+    SummaryService sut;
 
     @Mock
     SummaryRepository summaryRepository;
@@ -48,7 +48,7 @@ class SummaryServiceTest {
 
     @BeforeEach
     void setUp() {
-        summaryService = new SummaryService(
+        sut = new SummaryService(
                 summaryRepository,
                 topicRepository,
                 tagRepository
@@ -74,7 +74,7 @@ class SummaryServiceTest {
             when(topicRepository.findById("topicId")).thenReturn(Optional.of(jpaTopic));
 
             // act
-            String id = summaryService.create(dto);
+            String id = sut.create(dto);
 
             // assert
             verify(summaryRepository).save(jpaSummaryArgumentCaptor.capture());
@@ -116,7 +116,7 @@ class SummaryServiceTest {
             when(tagRepository.findById("tagId2")).thenReturn(Optional.of(jpaTag2));
 
             // act
-            String id = summaryService.create(dto);
+            String id = sut.create(dto);
 
             // assert
             verify(summaryRepository).save(jpaSummaryArgumentCaptor.capture());
@@ -137,7 +137,7 @@ class SummaryServiceTest {
         @Test
         void throw_exception_when_summary_not_found() {
             assertThrows(SummaryNotFoundException.class,
-                    () -> summaryService.update("summaryId", new UpdateSummaryDto())
+                    () -> sut.update("summaryId", new UpdateSummaryDto())
             );
         }
 
@@ -153,7 +153,7 @@ class SummaryServiceTest {
             when(summaryRepository.findById("summaryId")).thenReturn(Optional.of(new JpaSummary()));
 
             assertThrows(TopicNotFoundException.class,
-                    () -> summaryService.update("summaryId", dto)
+                    () -> sut.update("summaryId", dto)
             );
         }
 
@@ -170,7 +170,7 @@ class SummaryServiceTest {
             when(topicRepository.findById("newTopicId")).thenReturn(Optional.of(new JpaTopic()));
 
             assertThrows(TagNotFoundException.class,
-                    () -> summaryService.update("summaryId", dto)
+                    () -> sut.update("summaryId", dto)
             );
         }
 
@@ -209,7 +209,7 @@ class SummaryServiceTest {
             when(topicRepository.findById("newTopicId")).thenReturn(Optional.of(newJpaTopic));
 
             // act
-            summaryService.update("summaryId", dto);
+            sut.update("summaryId", dto);
 
             // assert
             verify(summaryRepository).save(jpaSummaryArgumentCaptor.capture());
@@ -263,7 +263,7 @@ class SummaryServiceTest {
             when(tagRepository.findById("newTagId")).thenReturn(Optional.of(newJpaTag));
 
             // act
-            summaryService.update("summaryId", dto);
+            sut.update("summaryId", dto);
 
             // assert
             verify(summaryRepository).save(jpaSummaryArgumentCaptor.capture());
@@ -284,7 +284,7 @@ class SummaryServiceTest {
         @Test
         void throw_exception_when_summary_not_found() {
             assertThrows(SummaryNotFoundException.class,
-                    () -> summaryService.delete("summaryId")
+                    () -> sut.delete("summaryId")
             );
         }
 
@@ -298,7 +298,7 @@ class SummaryServiceTest {
             when(summaryRepository.findById("summaryId")).thenReturn(Optional.of(jpaSummary));
 
             // act
-            summaryService.delete("summaryId");
+            sut.delete("summaryId");
 
             // assert
             verify(summaryRepository).delete(jpaSummary);
@@ -311,7 +311,7 @@ class SummaryServiceTest {
         @Test
         void throw_exception_when_summary_not_found() {
             assertThrows(SummaryNotFoundException.class,
-                    () -> summaryService.getById("123")
+                    () -> sut.getById("123")
             );
         }
 
@@ -339,7 +339,7 @@ class SummaryServiceTest {
             when(summaryRepository.findById("summaryId")).thenReturn(Optional.of(jpaSummary));
 
             // act
-            PublicSummaryDto summaryDto = summaryService.getById("summaryId");
+            PublicSummaryDto summaryDto = sut.getById("summaryId");
 
             // assert
             assertThat(summaryDto).isEqualTo(new PublicSummaryDto(
@@ -368,7 +368,7 @@ class SummaryServiceTest {
             when(summaryRepository.findById("summaryId")).thenReturn(Optional.of(jpaSummary));
 
             // act
-            PublicSummaryDto summaryDto = summaryService.getById("summaryId");
+            PublicSummaryDto summaryDto = sut.getById("summaryId");
 
             // assert
             assertThat(summaryDto).isEqualTo(new PublicSummaryDto(
@@ -408,7 +408,7 @@ class SummaryServiceTest {
             when(summaryRepository.findAll()).thenReturn(Collections.singletonList(jpaSummary));
 
             // act
-            List<PublicSummaryDto> summaryDtos = summaryService.getAll();
+            List<PublicSummaryDto> summaryDtos = sut.getAll();
 
             // assert
             assertThat(summaryDtos).containsExactly(new PublicSummaryDto(
@@ -437,7 +437,7 @@ class SummaryServiceTest {
             when(summaryRepository.findAll()).thenReturn(Collections.singletonList(jpaSummary));
 
             // act
-            List<PublicSummaryDto> summaryDtos = summaryService.getAll();
+            List<PublicSummaryDto> summaryDtos = sut.getAll();
 
             // assert
             assertThat(summaryDtos).containsExactly(new PublicSummaryDto(

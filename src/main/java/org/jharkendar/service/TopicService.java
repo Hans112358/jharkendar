@@ -1,6 +1,8 @@
 package org.jharkendar.service;
 
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.jharkendar.data.summary.JpaSummary;
 import org.jharkendar.data.summary.SummaryRepository;
 import org.jharkendar.data.topic.JpaTopic;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @ApplicationScoped
+@AllArgsConstructor
+@NoArgsConstructor
 public class TopicService {
 
     @Inject
