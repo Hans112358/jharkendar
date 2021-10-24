@@ -1,36 +1,36 @@
 version: "2.3"
 
 services:
-  quarkus-service:
-    build:
-      context: .
-      dockerfile: src/main/docker/Dockerfile.native
-    image: jahrkendar-server
+  app:
+    build: .
+    image: quarkus/jharkendar
     mem_limit: 256m
+    environment:
+      - quarkus.datasource.username=root
+      - quarkus.datasource.password=password
+      - quarkus.datasource.jdbc.url=jdbc:mysql://database:3306/jharkendar
     ports:
       - "8080:8080"
     depends_on:
-      quarkus-db:
+      database:
         condition: service_healthy
     networks:
-      - quarkus
-
-  quarkus-db:
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: quarkus
+      - net
+  database:
+    image: mysql:5.7
     ports:
       - "3306:3306"
-    volumes:
-      - $HOME/tmp/db/jharkendar.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=jharkendar
     networks:
-      - quarkus
+      - net
+    #    volumes:
+    #      - $HOME/tmp/db/jharkendar.sql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
 networks:
-  quarkus:
+  net:
     driver: bridge
